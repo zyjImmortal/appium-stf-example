@@ -8,6 +8,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
+import io.appium.java_client.service.local.AppiumServiceBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
@@ -17,9 +18,10 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
+
 public class AndroidTest {
-    private static final String STF_SERVICE_URL = "http://localhost:7100";  // Change this URL
-    private static final String ACCESS_TOKEN = "ba3074f108a44ce39192d37b514a1217ec0b4f77baab423b97d273dc5369be4f";  // Change this access token
+    private static final String STF_SERVICE_URL = "http://192.168.1.131:7100";  // Change this URL
+    private static final String ACCESS_TOKEN = "1fc1b2990f3b48e5ab5eb3be124c5480afba25cab71f4e1dbad971f80e58be1a";  // Change this access token
 
     private AndroidDriver androidDriver;
     private String deviceSerial;
@@ -32,6 +34,8 @@ public class AndroidTest {
     }
 
     private void createAppiumService() {
+        AppiumServiceBuilder builder = new AppiumServiceBuilder();
+//        this.service = builder.withIPAddress("192.168.99.101").build();
         this.service = AppiumDriverLocalService.buildDefaultService();
         this.service.start();
     }
@@ -59,11 +63,13 @@ public class AndroidTest {
 
     @Test
     public void currentActivityTest() throws InterruptedException {
+        System.out.println("Service Status:" + service.isRunning());
         Assert.assertEquals(androidDriver.currentActivity(), ".ApiDemos", "Activity not match");
     }
 
     @Test(dependsOnMethods = {"currentActivityTest"})
     public void scrollingToSubElement() {
+        System.out.println("Service Status:" + service.isRunning());
         androidDriver.findElementByAccessibilityId("Views").click();
         AndroidElement list = (AndroidElement) androidDriver.findElement(By.id("android:id/list"));
         MobileElement radioGroup = list
@@ -88,8 +94,8 @@ public class AndroidTest {
     @DataProvider
     public Object[][] parallelDp() {
         return new Object[][] {
-            {"3JU5T18331000564"},   // Change the device serial
-            {"6LB6KNEADMVKPF9S"},    // Change the device serial
+//            {"3JU5T18331000564"},  /**/ // Change the device serial
+            {"20a7c444"}    // Change the device serial
         };
     }
 }
